@@ -1,11 +1,12 @@
-function [r0, f] = ray(phi,h, plot_flag)
+function [r0, f, raywidth] = ray(phi, h, plot_flag)
 %Outputs starting point of rays on unit square as r0 along with the rays 
 %themselves as functions. phi is the angle of slope and h is the spacing
 %between rays
-
 if nargin == 2
     plot_flag = false;   
 end
+
+raywidth = h/2;
 
 if (phi > 0) && (phi < pi /2)
     x_hor = 0: (h / sin(phi)) : 1 ;

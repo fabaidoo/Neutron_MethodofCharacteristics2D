@@ -40,6 +40,7 @@ end
 if plot_flag == true
    s = 0:.01:10;
    figure
+   ax = gca;
   
    for i = 1: length(f)
       xy = f{i}(s);
@@ -49,6 +50,9 @@ if plot_flag == true
    
    xlim([0 1])
    ylim([0 1])
+   ax.XTick = 0:1/5:1;
+   ax.YTick = 0:1/5:1;
+   grid
     
 end
     

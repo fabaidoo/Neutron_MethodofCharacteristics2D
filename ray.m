@@ -1,4 +1,4 @@
-function [r0, f, raywidth] = ray(phi, h, plot_flag)
+function [f, raywidth] = ray(phi, h, plot_flag)
 %Outputs starting point of rays on unit square as r0 along with the rays 
 %themselves as functions. phi is the angle of slope and h is the spacing
 %between rays

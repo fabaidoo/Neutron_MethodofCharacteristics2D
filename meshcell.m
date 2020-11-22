@@ -40,15 +40,58 @@ classdef meshcell
             elseif strcmpi(obj.material, 'air') == 1
                 obj.sig_t = 0.01;
                 obj.sig_s = 0.006;
+            elseif strcmpi(obj.material, 'test') == 1
+                obj.sig_t = 10;
+                obj.sig_s = 0;
             else
                 error('material type not available')
             end
             
         end
         
+        function [psibar_contrb, psi_out ] = psi_ave(obj, ds, psi_in, phi_old, Oz, w_z, w_xy)
+            %calculates average psi contribution due to a ray of length ds 
+            %through the cell at angle theta.Iterates through the z-axis
+            %directions
+            
+            %psi_bar = 0;
+            
+            Qnew = obj.Q +  0.5 * obj.sig_s .* phi_old;
+            S = Qnew / obj.sig_t;
+            
+            tau = obj.sig_t * ds ./ Oz;
+            
+            psi_z = w_z .* (psi_in .* obj.f(tau) + S .* (1 - obj.f(tau)));
+            
+            psibar_contrb = sum(psi_z) * w_xy;
+            
+            psi_out = psi_in .* exp(-tau) + S .* (1 - exp(- tau));
+            
+            
+            
+        end
         
         
     end
+    
+   methods(Static)
+       
+       function y = f(tau)
+            if abs(tau) < 0.05
+                y = 1 - tau ./ 2;
+            else
+                y = (1 - exp(- tau) ) ./ tau ;   
+            end
+            
+            
+        end
+        
+       
+       
+   end
+    
+  
+    
         
         
 end

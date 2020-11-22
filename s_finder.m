@@ -22,7 +22,7 @@ loc_y = discretize(r0(2), bins); %location of r(0)
 
 if r0(2) == 0
     point_type = 'bottom';   
-elseif (r0(1) == 0) || (h * r0(1) == 1)
+elseif (r0(1) == 0) || (r0(1) == meshnum)
     point_type = 'side';
 end
 
@@ -50,7 +50,7 @@ if tan_phi > 0
         
     elseif strcmp(point_type, 'side') 
         Ny = loc_y: 1: meshnum; %horizontal mesh edges above y-starting point
-        t_x = (Ny(end) - r0(2)) / tan_phi;
+        t_x = (meshnum - r0(2)) / tan_phi;
         Nx = 0: 1: t_x; %vertical meshes to the left of x-ending point
        
         s = zeros(1,length(Nx) + length(Ny));
@@ -60,7 +60,7 @@ if tan_phi > 0
         end
         
         for i = 1: length(Nx)
-            j = length(Ny) + 1;
+            j = length(Ny) + i;
             r1 = [Nx(i) ; Nx(i)*tan_phi + r0(2)]; %intersection of ray and vertical mesh edge
             
             s(j) = dot(O_hat, (r1 - r0));
@@ -116,23 +116,8 @@ elseif tan_phi < 0
     end
 end
 
-s = s * h;
+s = s * h; %rescale s to the true dimensions of the problem
 
- len = length(s);
- for i = 1: len
-     j = len + 1 - i;
-     r1 = f(s(j));
- 
-     if (r1(1) < 0) || (r1(1) > 1) || (r1(2) > 1) || (r1(2) < 0) %check whether point is outside outerbox
-         s = s(1: j-1); %delete offending point
-     else
-         break
-     end
-    
- end
-
-
- 
  if plot_flag == true
      figure
      ax = gca;
@@ -146,6 +131,24 @@ s = s * h;
      xlim([0 1])
      ylim([0 1])
  end
+
+
+ len = length(s);
+ for i = 1: len
+     j = len + 1 - i;
+     r1 = f(s(j));
+ 
+     if (r1(1) < eps ) || (r1(1) > 1 + eps) || (r1(2) > 1 + eps) || (r1(2) < eps) %check whether point is outside outerbox
+         s = s(1: j-1); %delete offending point
+     else
+         break
+     end
+    
+ end
+
+
+ 
+
  
  
  

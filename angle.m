@@ -10,10 +10,13 @@ end
 
 w_xy = 2 * pi / n_xy;
 
-phi = pi * linspace(1/n_xy , (2*n_xy - 1)/n_xy, n_xy);%azimuthal angle 
+phi_whole = pi * linspace(1/n_xy , (2*n_xy - 1)/n_xy, n_xy);%azimuthal angle 
 % SAME AS: 1/n: 2/n: (2*n - 1)/n
+phi = phi_whole(1 : n_xy/2);
 
 [Oz, w_z] = angle_z(n_z); 
+Oz = Oz';
+w_z = w_z' ;
 
 function [mu, w_z] = angle_z(m)
 %Angular discretization in the z-direction
@@ -22,6 +25,9 @@ if mod(m,2) == 1
 elseif m > 8
     error('Highest available discretization is S8')
 end
+S0 = 1;
+w0 = 1;
+
 S2 = .5773502691896257;
 w2 = 1;
        
@@ -37,8 +43,15 @@ w8 = [.3626838 .3137066 .2223810 .1012285];
 Sn = {S2, S4, S6, S8};
 wn = {w2, w4, w6, w8};
 
-mu = Sn{m/2};
-w_z = wn{m/2};
+if m > 0
+    mu = Sn{m/2};
+    w_z = wn{m/2};
+else
+    mu = S0;
+    w_z = w0;
+end
+
+
 end
 
 

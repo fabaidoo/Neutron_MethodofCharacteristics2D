@@ -81,8 +81,20 @@ while iter <= max_iter && err > tol
            for k = 1: length(ds)
                l = length(ds) + 1 - k;
                loc = discretize(R_half(:, l), 0:1:meshnum);
-               m = loc(1);
-               n = loc(2);
+               if  (R_half(1, k) <= meshnum) && (R_half(1, k) >= 0)...
+                       && (R_half(2, k) <= meshnum) && (R_half(2, k) >= 0)
+                   m = loc(1);
+                   n = loc(2);
+               elseif  (R_half(1, k) > meshnum)
+                   m = meshnum;
+               elseif (R_half(1, k) < 0)
+                   m = 1;
+               elseif (R_half(2, k) > meshnum)
+                   n = meshnum;
+               elseif (R_half(2, k) < 0)
+                   n = 1;
+               end
+               
                obj = mesh{m, n}; %meshcell the ray is passing thru
                
                [phi_ang_ray, psi_b(:, l)] = ...

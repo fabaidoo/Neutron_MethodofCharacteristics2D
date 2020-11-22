@@ -137,7 +137,7 @@ figure
 plot(cent, phi_bottom, '.-r','MarkerSize', 11, 'LineWidth', 1.5)
 xlabel('(x, 0)')
 ylabel('\phi(x, 0)')
-title(str)g
+title(str)
 
 
 
